@@ -105,8 +105,6 @@ BegClass DataGateFileOperations Access(*Public)
        
         GetDB(DBName)
 
-        fi.Alias = Prefix
-        fi.Prefix = Prefix 
         
         Try
             // Get the file object.
@@ -127,7 +125,13 @@ BegClass DataGateFileOperations Access(*Public)
             // Get it from the FileObj.Text property.
             fi.Description = FileObj.Text 
 
+            fi.Alias = Prefix
+            fi.Prefix = Prefix 
+
+
             AddSortedKeyFields(fi)
+
+
 
             FileObj.Definition.Save("c:\users\roger\documents\" + Library + "_" + File + ".xml") 
         Catch dgEx Type( dgException )

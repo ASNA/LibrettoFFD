@@ -49,7 +49,7 @@ BegClass Tester Access(*Public)
 //        EndFor
 
         Json = JsonConvert.SerializeObject(fi,Formatting.Indented) 
-        File.WriteAllText('c:\users\roger\documents\programming\' + FileName + 'json', Json) 
+        File.WriteAllText('c:\users\roger\documents\programming\' + FileName + '.json', Json) 
     EndSr 
 
 EndClass
