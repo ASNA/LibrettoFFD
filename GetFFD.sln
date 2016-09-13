@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A99171F4-43ED-48FC-978B-9193EDE4E466}") = "GetFFD", "GetFFD\GetFFD.vrproj", "{B98704F4-CFB0-4270-819F-5B28F0CB1A2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B98704F4-CFB0-4270-819F-5B28F0CB1A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B98704F4-CFB0-4270-819F-5B28F0CB1A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B98704F4-CFB0-4270-819F-5B28F0CB1A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B98704F4-CFB0-4270-819F-5B28F0CB1A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

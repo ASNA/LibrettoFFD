@@ -1,0 +1,9 @@
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\bin\Debug\SortCollection.dll
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\bin\Debug\SortCollection.pdb
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\bin\Debug\Newtonsoft.Json.dll
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\bin\Debug\GetFFD.pdb
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\bin\Debug\Newtonsoft.Json.xml
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\obj\Debug\SortCollection.dll
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\obj\Debug\SortCollection.pdb
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\SortCollection\obj\Debug\SortCollection.csprojResolveAssemblyReference.cache

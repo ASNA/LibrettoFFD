@@ -1,0 +1,262 @@
+Using System
+Using System.Text
+Using System.Collections
+Using System.Collections.Specialized
+Using System.Text.RegularExpressions
+
+DclNameSpace rpUtilities
+
+BegClass Field Access(*Public)
+
+    DclFld DataTypes    Type( NameValueCollection ) New()
+    DclFld SqlDataTypes Type( NameValueCollection ) New()
+
+    BegConstructor Access( *Public ) Base()
+        DclSrParm Name         Type( *String ) 
+        DclSrParm Type         Type( *String ) 
+        DclSrParm Length       Type( *Integer4 ) 
+        DclSrParm Decimals     Type( *Integer4 ) 
+        DclSrParm Description  Type( *String ) 
+        
+        *This.Name         = Name   
+        *This.Type         = Type        
+        *This.Length       = Length      
+        *This.Decimals     = Decimals    
+        *This.Description  = Description 
+    EndConstructor                                   
+    
+    BegConstructor Access( *Public ) 
+        DataTypes.Add( "BINARY"    , "System.Decimal" ) 
+        DataTypes.Add( "BOOLEAN"   , "System.Boolean" ) 
+        DataTypes.Add( "CHAR"      , "System.String"  ) 
+        DataTypes.Add( "DATE"      , "System.DateTime" ) 
+        DataTypes.Add( "DECIMAL"   , "System.Decimal" ) 
+        DataTypes.Add( "INTEGER2"  , "System.Int16"   ) 
+        DataTypes.Add( "INTEGER4"  , "System.Int32"   ) 
+        DataTypes.Add( "INTEGER8"  , "System.Int64"   ) 
+        DataTypes.Add( "ONECHAR"   , "System.Char"    ) 
+        DataTypes.Add( "PACKED"    , "System.Decimal" ) 
+        DataTypes.Add( "STRING"    , "System.String"  )
+        DataTypes.Add( "TIME"      , "System.DateTime" ) 
+        DataTypes.Add( "TIMESTAMP" , "System.DateTime" ) 
+        DataTypes.Add( "ZONED"     , "System.Decimal" ) 
+        
+        SqlDataTypes.Add( "BINARY"    , "decimal"   ) //"System.Decimal" )
+        SqlDataTypes.Add( "BOOLEAN"   , "bit"       ) //"System.Boolean" )
+        SqlDataTypes.Add( "CHAR"      , "nchar"     ) //"System.String"  )
+        SqlDataTypes.Add( "DATE"      , "datetime"  ) //"System.Date"    )
+        SqlDataTypes.Add( "DECIMAL"   , "decimal"   ) //"System.Decimal" )
+        SqlDataTypes.Add( "INTEGER2"  , "int"       ) //"System.Int16"   )
+        SqlDataTypes.Add( "INTEGER4"  , "int"       ) //"System.Int32"   )
+        SqlDataTypes.Add( "INTEGER8"  , "bigint"    ) //"System.Int64"   )
+        SqlDataTypes.Add( "ONECHAR"   , "nchar"     ) //"System.Char"    )
+        SqlDataTypes.Add( "PACKED"    , "decimal"   ) //"System.Decimal" )
+        SqlDataTypes.Add( "STRING"    , "nchar"     ) //"System.String"  )
+        SqlDataTypes.Add( "TIME"      , "datetime"  ) //"System.Date"    )
+        SqlDataTypes.Add( "TIMESTAMP" , "datetime"  ) //"System.Date"    )
+        SqlDataTypes.Add( "ZONED"     , "decimal"   ) //"System.Decimal" )
+    EndConstructor   
+
+    DclFld _Name Type( *String )
+    BegProp Name Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Name )
+        EndGet
+
+        BegSet
+            _Name = *PropVal
+        EndSet
+    EndProp
+
+    DclFld _Type Type( *String )
+    BegProp Type Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Type )
+        EndGet
+
+        BegSet
+            _Type = *PropVal
+        EndSet
+    EndProp
+    
+    BegProp SystemType  Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr DataTypes[ *This.Type.ToUpper() ]
+        EndGet
+    EndProp
+    
+    BegFunc GetSqlServerType Type( *String ) 
+        DclFld Result Type( *String )
+        
+        Result = SqlDataTypes[ *This.Type.ToUpper() ].ToLower()
+        
+        If ( Regex.Match( *This.Length, "\d{1,4}" ).Success ) 
+            // If the length is greater than 9 digits and their are
+            // zero decimals, then convert to SQL Server bigint.
+            If ( Convert.ToInt32( *This.Length ) > 9 ) AND +
+               ( NOT String.IsNullOrEmpty( *This.Decimals ) ) AND +
+               ( *This.Decimals.Trim().Length > 0 ) AND + 
+               ( Convert.ToInt32( *This.Decimals ) = 0 )
+               
+               Result = "bigint" 
+            EndIf           
+        EndIf   
+        LeaveSr Result    
+    EndFunc
+    
+    BegProp SqlServerType  Type( *String )  Access( *Public )
+        BegGet
+            DclFld SqlServerDataType Type( *String ) 
+            
+            SqlServerDataType = GetSqlServerType()
+            
+            LeaveSr "SqlDBType." + SqlServerDataType
+        EndGet
+    EndProp
+    
+    BegProp SqlServerTypeWithLength  Type( *String )  Access( *Public )
+        BegGet
+            DclFld SqlServerDataType Type( *String ) 
+
+            SqlServerDataType = GetSqlServerType()
+
+            If     ( *This.Type.ToUpper() = "CHAR" ) 
+                SqlServerDataType += "(" + *This.Length.Trim() + ")"
+                
+            ElseIf ( *This.Decimals.Trim() <> String.Empty ) 
+                SqlServerDataType += "(" + *This.Length.Trim() + ", " ++
+                                           *This.Decimals.Trim() + ")"
+            EndIf
+            LeaveSr SqlServerDataType
+        EndGet
+    EndProp
+
+    BegProp SqlServerNull Type( *String ) Access( *Public ) 
+        BegGet
+            If ( *This.AllowNull ) 
+                LeaveSr "NULL"            
+            Else
+                LeaveSr "NOT NULL"
+            EndIf
+        EndGet
+    EndProp 
+    
+    DclFld  _AllowNull Type( *Boolean ) 
+    BegProp AllowNull Type( *Boolean ) Access( *Public )
+        BegGet
+            LeaveSr _AllowNull
+        EndGet
+        BegSet
+            _AllowNull = *PropVal 
+        EndSet
+    EndProp
+    
+    BegProp IsKey Type( *Boolean ) Access( *Public ) 
+        BegGet    
+            LeaveSr ( *This.KeyPosition > -1 )     
+        EndGet       
+    EndProp                
+    
+    BegProp SqlServerPrimaryKey Type( *String ) Access( *Public ) 
+        BegGet
+            If ( *This.IsKey ) 
+                LeaveSr "PRIMARY KEY"            
+            Else
+                LeaveSr String.Empty 
+            EndIf            
+        EndGet
+    EndProp
+    
+    BegProp FullType Type( *String )  Access( *Public )
+        BegGet
+            DclFld TypeMask           Type( *String )  Inz( "Type(*{0})" )  
+            DclFld TypeMaskNoDecimals Type( *String )  Inz( "Type(*{0}) Len({1})" ) 
+            DclFld TypeMaskDecimals   Type( *String )  Inz( "Type(*{0}) Len({1},{2})" )  
+        
+            If      ( *This.Length.Trim() = String.Empty ) 
+                LeaveSr String.Format( TypeMask, *This.Type ) 
+
+            ElseIf  ( *This.Decimals.Trim() = String.Empty ) 
+                LeaveSr String.Format( TypeMaskNoDecimals, *This.Type, *This.Length.Trim() ) 
+            
+            Else
+                LeaveSr String.Format( TypeMaskDecimals, *This.Type, *This.Length.Trim(), *This.Decimals.Trim() ) 
+            
+            EndIf                
+        EndGet
+    EndProp
+    
+    BegProp LengthDecimals Type( *String ) Access( *Public ) 
+        BegGet
+            If      ( *This.Length.Trim() = String.Empty ) 
+                LeaveSr String.Empty
+
+            ElseIf  ( *This.Decimals.Trim() = String.Empty ) 
+                LeaveSr *This.Length.Trim()  
+            
+            Else
+                LeaveSr *This.Length.Trim() + "," + *This.Decimals.Trim()  
+           
+            EndIf                
+        EndGet
+    EndProp
+
+    DclFld _Length Type( *String )
+    BegProp Length Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Length )
+        EndGet
+
+        BegSet                              
+            _Length = *PropVal
+        EndSet
+    EndProp
+
+    DclFld _Decimals Type( *String )
+    BegProp Decimals Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Decimals )
+        EndGet
+
+        BegSet
+            _Decimals = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _KeyPosition Type( *Integer4 )  Inz( -1 ) 
+    BegProp KeyPosition Type( *Integer4 )  Access( *Public )
+        BegGet
+            LeaveSr Value( _KeyPosition )
+        EndGet
+
+        BegSet
+            _KeyPosition = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _Description Type( *String )
+    BegProp Description Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Description )
+        EndGet
+
+        BegSet
+            _Description = *PropVal
+        EndSet
+    EndProp   
+   
+    DclFld _Alias Type( *String ) Inz( "" ) 
+    BegProp Alias Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Alias )
+        EndGet
+
+        BegSet
+            _Alias = *PropVal
+        EndSet
+    EndProp
+    
+
+EndClass
+
+                

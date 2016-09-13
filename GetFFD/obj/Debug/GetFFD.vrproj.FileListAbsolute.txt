@@ -1,0 +1,8 @@
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\bin\Debug\GetFFD.exe
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\bin\Debug\GetFFD.pdb
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\obj\Debug\GetFFD.exe
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\obj\Debug\GetFFD.pdb
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\bin\Debug\Newtonsoft.Json.dll
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\bin\Debug\Newtonsoft.Json.xml
+C:\Users\roger\Documents\Programming\AVR\Other\GetFFD\GetFFD\obj\Debug\GetFFD.vrprojResolveAssemblyReference.cache

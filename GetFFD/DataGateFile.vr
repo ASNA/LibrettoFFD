@@ -1,0 +1,243 @@
+Using System
+Using System.Collections 
+Using System.Xml 
+Using System.Text 
+Using System.Text.RegularExpressions
+
+DclNameSpace rpUtilities
+
+// rpnote: !important
+BegClass DataGateFile Access( *Public ) 
+    DclFld _DBName Type( *String )
+    BegProp DBName Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _DBName )
+        EndGet
+
+        BegSet
+            _DBName = *PropVal
+        EndSet
+    EndProp
+
+    DclFld _Library Type( *String )
+    BegProp Library Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Library )
+        EndGet
+
+        BegSet
+            _Library = *PropVal
+        EndSet
+    EndProp
+
+    DclFld _File Type( *String )
+    BegProp File Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _File )
+        EndGet
+
+        BegSet
+            _File = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _Format Type( *String )  Inz( "" ) 
+    BegProp Format Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Format )
+        EndGet
+
+        BegSet
+            _Format = *PropVal
+        EndSet
+    EndProp 
+    
+    DclFld _Description Type( *String )  Inz( "" ) 
+    BegProp Description Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Description )
+        EndGet
+
+        BegSet
+            _Description = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _Type Type( *String )
+    BegProp Type Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Type )
+        EndGet
+
+        BegSet
+            _Type = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _RecordLength Type( *String )
+    BegProp RecordLength Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _RecordLength )
+        EndGet
+
+        BegSet
+            _RecordLength = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _KeyLength Type( *String )
+    BegProp KeyLength Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _KeyLength )
+        EndGet
+
+        BegSet
+            _KeyLength = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _BaseFile Type( *String ) Inz( "" ) 
+    BegProp BaseFile Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _BaseFile )
+        EndGet
+
+        BegSet
+            _BaseFile = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _DuplicateKeys Type( *String ) 
+    BegProp DuplicateKeys Type( *String ) Access( *Public ) 
+        BegGet
+            LeaveSr _DuplicateKeys
+        EndGet
+        BegSet
+            _DuplicateKeys = *PropVal
+        EndSet
+    EndProp
+    
+    BegProp SqlServerUniqueIndex Type( *String )  Access( *Public )
+        BegGet
+            If ( *This.DuplicateKeys = "none" ) 
+                LeaveSr "UNIQUE"
+            Else
+                LeaveSr String.Empty 
+            EndIf
+        EndGet
+    EndProp
+    
+    DclFld _Fields Type( rpUtilities.FieldCollection ) New()
+    BegProp Fields Type( rpUtilities.FieldCollection )  Access( *Public )
+        // Get the collection of all fields.
+        BegGet
+            LeaveSr Value( _Fields )
+        EndGet
+
+        BegSet
+            _Fields = *PropVal
+        EndSet
+    EndProp
+
+    DclFld _KeyFields Type( rpUtilities.FieldCollection ) New()
+    BegProp KeyFields Type( rpUtilities.FieldCollection )  Access( *Public )
+        // Get the collection of all fields.
+        BegGet
+            LeaveSr Value( _KeyFields )
+        EndGet
+
+        BegSet
+            _KeyFields = *PropVal
+        EndSet
+    EndProp
+    
+    DclFld _Prefix Type( *String )
+    BegProp Prefix Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Prefix )
+        EndGet
+
+        BegSet
+            _Prefix = *PropVal
+        EndSet
+    EndProp
+
+    DclFld _Alias Type( *String )
+    BegProp Alias Type( *String )  Access( *Public )
+        BegGet
+            LeaveSr Value( _Alias )
+        EndGet
+
+        BegSet
+            _Alias = *PropVal
+        EndSet
+    EndProp
+
+    
+    BegProp AllFieldsWithPrefix  Access( *Public ) Type( *String ) 
+        BegGet        
+            LeaveSr AppendPrefixToFieldList( *This.Fields ) 
+        EndGet
+    EndProp 
+
+//    BegProp SelectedFieldsWithPrefix  Access( *Public ) Type( *String ) 
+//        BegGet        
+//            LeaveSr AppendPrefixToFieldList( *This.Fields.SelectedFields ) 
+//        EndGet
+//    EndProp 
+
+    DclProp FieldsList Type(*String) Access(*Public) 
+    DclProp KeyFieldsList Type(*String) Access(*Public) 
+
+    BegProp KeyFieldsWithPrefix  Access( *Public ) Type( *String ) 
+        BegGet        
+            LeaveSr AppendPrefixToFieldList( *This.Fields.KeyFields )          
+        EndGet
+    EndProp 
+    
+    BegFunc AppendPrefixToFieldList Type( *String ) 
+        DclSrParm FieldList      Type( rpUtilities.FieldCollection ) 
+            
+        DclFld sb                    Type( StringBuilder ) New( 64 ) 
+        
+        ForEach f Type( rpUtilities.Field ) Collection( FieldList ) 
+            sb.Append( *This.Prefix + f.Name.Trim() + ", " ) 
+        EndFor 
+        
+        LeaveSr RegEx.Replace( sb.ToString(), ",\s*$", String.Empty ) 
+    EndFunc         
+    
+    // --------------------------------------------------------------------------------------------------
+    
+    BegProp AllFieldsAliasWithPrefix  Access( *Public ) Type( *String ) 
+        BegGet        
+            LeaveSr AppendPrefixToFieldAliasList( *This.Fields ) 
+        EndGet
+    EndProp 
+
+//    BegProp SelectedFieldsAliasWithPrefix  Access( *Public ) Type( *String ) 
+//        BegGet        
+//            LeaveSr AppendPrefixToFieldAliasList( *This.Fields.SelectedFields ) 
+//        EndGet
+//    EndProp 
+
+    BegProp KeyFieldsWithAliasPrefix  Access( *Public ) Type( *String ) 
+        BegGet        
+            LeaveSr AppendPrefixToFieldAliasList( *This.Fields.KeyFields )          
+        EndGet
+    EndProp 
+    
+    BegFunc AppendPrefixToFieldAliasList Type( *String ) 
+        DclSrParm FieldList      Type( rpUtilities.FieldCollection ) 
+            
+        DclFld sb                    Type( StringBuilder ) New( 64 ) 
+        
+        ForEach f Type( rpUtilities.Field ) Collection( FieldList ) 
+            sb.Append( *This.Prefix + f.Alias.Trim() + ", " ) 
+        EndFor 
+        
+        LeaveSr RegEx.Replace( sb.ToString(), ",\s*$", String.Empty ) 
+    EndFunc         
+    
+
+EndClass

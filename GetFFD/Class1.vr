@@ -1,0 +1,55 @@
+﻿Using System 
+Using System.Collections
+Using System.Text
+Using NewtonSoft.Json
+Using System.IO
+
+BegClass Program
+
+	BegSr Main Shared(*Yes) Access(*Public) Attributes(System.STAThread())
+		DclSrParm args Type(*String) Rank(1)
+
+        DclFld t Type(Tester) New()
+
+        t.Run() 
+
+        Console.WriteLine("Press any key to continue...")
+        Console.ReadKey() 
+	EndSr
+
+EndClass
+
+BegClass Tester Access(*Public) 
+
+    BegSr Run Access(*Public) 
+
+        DclFld dgFileOps Type(rpUtilities.DataGateFileOperations) New()
+        DclFld fi Type( rpUtilities.DataGateFile )  
+        DclFld Json Type(*String)
+
+        DclFld DB Type(*String) 
+        DclFld Library Type(*String) 
+        DclFld FileName Type(*String) 
+        DclFld Prefix Type(*String) 
+
+        DB = '*Public/DG Net Local'
+        Library = 'Examples'
+        FileName = 'CMastNewL2' 
+        Prefix = 'CustL2_'
+
+
+        fi = dgFileOps.GetFileObject(DB, Library, FileName, Prefix) 
+        //fi = dgFileOps.GetFileObject("*Public/DG Net Local", "Examples", "CMastNewL2", "CustL2_")        
+        //fi = dgFileOps.GetFileObject("*Public/DG Net Local", "Devo", "DGUser", "User_")        
+
+
+//        fi = dgFileOps.GetFileObject("*Public/Cypress", "JG_RLOY", "DCSLOTDRL")        
+//        ForEach field Type(rpUtilities.Field) Collection(fi.Fields)
+//            field.Type = "*" + field.Type 
+//        EndFor
+
+        Json = JsonConvert.SerializeObject(fi,Formatting.Indented) 
+        File.WriteAllText('c:\users\roger\documents\programming\' + FileName + 'json', Json) 
+    EndSr 
+
+EndClass
